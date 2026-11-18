@@ -109,6 +109,8 @@ Usa las siguientes fuentes cuya licencia permite su uso:
 ### Responsive
 Los ejercicios van a ser realizados en mayor medida en móviles y tabletas, por lo que los ejercicios deben ser siempre responsive.
 Cada ejercicio debe poderse ver bien para la mayoría de móviles en orientación landscape.
+En los ejercicios de unir con líneas asegura que hay un margen entre elementos de la izquierda y la derecha por si la orientación es portrait.
+Asegura en los ejercicios un mínimo de margen de 2px por la izquierda y por la derecha.
 
 ### Estilos homogéneos
 Utiliza los mismos estilos en todos los ejercicios.
@@ -127,6 +129,7 @@ En el cuerpo aparecerán los botones correspondientes al nivel 1 de la jerarquí
 ### Cabecera con Título
 El encabezado con el título centrado PRIMARIA DIGITAL es un encabezado de poca altura para maximizar el contenido que se muestra.
 Un icono con forma de casa alineado a la izquierda permite volver siempre a la página principal.
+  Si está en mitad de un ejercicio se pide confirmación con un pop up amigable del estilo azul de la página.
 
 ### Menú
 No se usan menús laterales ni superiores, el menú se muestra con botones con un grid centrado en el cuerpo principal de la página.
@@ -136,9 +139,10 @@ Pulsando el botón de un nivel, aparecerán las opciones del nivel siguiente.
 - Nivel 2: Selección de asignatura del curso (del curso seleccionado en el paso anterior)
 - Nivel 3: Selección de tema de la asignatura (de la asignatura seleccionada en el paso anterior)
 - Nivel 4: Selección de ejercicio de la asignatura (del tema seleccionado en el paso anterior)
+  Los botones de este nivel deben ocupar el 90% de anchura para intentar mostrar el nombre en una sola línea.
 
 Muestra todos los valores posibles aunque no haya datos en el modelo.
-Permite volver al nivel anterior, si está en mitad de un ejercicio se pide confirmación.
+Permite volver al nivel anterior, si está en mitad de un ejercicio se pide confirmación con un pop up amigable del estilo azul de la página.
 
 
 

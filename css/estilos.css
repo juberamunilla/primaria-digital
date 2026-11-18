@@ -48,7 +48,7 @@ button:disabled { cursor: default; }
   box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
 }
 
-.cabecera h1 { margin: 0; font-size: 1.4rem; font-weight: normal; letter-spacing: .05em; }
+.cabecera h1 { margin: 0; padding: 0 5.5rem; white-space: nowrap; font-size: min(1.4rem, 4.5vw); font-weight: normal; letter-spacing: .05em; }
 
 .inicio, .volver {
   position: absolute;
@@ -103,6 +103,10 @@ button:disabled { cursor: default; }
   border-radius: 1rem;
   box-shadow: 0 4px 0 #143a6b;
 }
+/* Nivel 4: botones de ejercicio al 90% del ancho para que el nombre quepa en una línea */
+.menu.ejercicios { max-width: none; }
+.menu.ejercicios .boton-menu { width: 90%; }
+
 .boton-menu:active { transform: translateY(3px); box-shadow: 0 1px 0 #143a6b; }
 
 .aviso { text-align: center; font-size: 1.4rem; color: var(--azul-oscuro); margin-top: 2rem; }
@@ -186,6 +190,7 @@ button:disabled { cursor: default; }
   max-width: 54rem;
   display: flex;
   justify-content: space-between;
+  gap: 3rem;
   touch-action: none;
 }
 .columna { display: flex; flex-direction: column; justify-content: space-around; }
@@ -234,6 +239,17 @@ button:disabled { cursor: default; }
 
 @media (orientation: portrait) {
   .historia { flex-direction: column; }
+  .menu.ejercicios .boton-menu { font-size: min(1.4rem, 4.5vw); }
+
+  /* En vertical las opciones con imagen van en dos filas de dos */
+  .opciones.con-imagen { grid-template-columns: repeat(2, auto); }
+  .opcion svg { width: min(36vw, 30dvh); height: min(36vw, 30dvh); }
+
+  /* En vertical el dibujo va encima del texto para dejar sitio a las líneas */
+  .elemento { height: auto; display: grid; grid-auto-flow: column; grid-template-rows: auto auto; justify-items: center; justify-content: space-between; }
+  .elemento svg { width: min(22vw, 16dvh); height: min(22vw, 16dvh); }
+  .elemento span { min-width: 0; text-align: center; }
+  .punto { grid-row: span 2; align-self: center; }
 }
 
 .fin { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; }
@@ -271,6 +287,8 @@ button:disabled { cursor: default; }
 .aprobado .mensaje { color: var(--naranja); }
 .mejorar { border-color: var(--rojo); }
 .mejorar .mensaje { color: var(--rojo); }
+.confirmacion { border-color: var(--azul); }
+.confirmacion .mensaje { font-size: 1.6rem; color: var(--azul-oscuro); }
 
 .fuegos { position: absolute; inset: 0; pointer-events: none; }
 .fuegos svg {

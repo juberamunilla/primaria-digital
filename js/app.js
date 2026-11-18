@@ -7,9 +7,9 @@ let estado = null;      // estado del ejercicio en curso
 
 window.addEventListener('resize', () => redibujar && redibujar());
 window.addEventListener('hashchange', mostrarRuta);
-volver.addEventListener('click', ev => {
-  if (app.querySelector('.ejercicio') && !confirm('¿Seguro que quieres salir del ejercicio?')) ev.preventDefault();
-});
+document.querySelectorAll('.inicio, .volver').forEach(enlace => enlace.addEventListener('click', ev => {
+  if (app.querySelector('.ejercicio')) { ev.preventDefault(); confirmarSalida(enlace.getAttribute('href')); }
+}));
 mostrarRuta();
 
 // ---------- Menú ----------
@@ -32,7 +32,7 @@ function mostrarRuta() {
   if (ejercicio) return iniciarEjercicio(ejercicio, base, null);
   if (tema) {
     return menu(`${asignatura.nombre} · ${tema.nombre}`,
-      ejercicios.map((e, i) => ({ texto: `${i + 1}. ${e.titulo}`, enlace: `${base}/ejercicio/${i + 1}` })));
+      ejercicios.map((e, i) => ({ texto: `${i + 1}. ${e.titulo}`, enlace: `${base}/ejercicio/${i + 1}` })), 'ejercicios');
   }
   if (asignatura) {
     return menu(`${curso.nombre} · ${asignatura.nombre}`,
@@ -44,9 +44,9 @@ function mostrarRuta() {
   menu('Elige tu curso', CURSOS.map(c => ({ texto: c.nombre, enlace: `#/curso/${c.id}` })));
 }
 
-function menu(titulo, opciones) {
+function menu(titulo, opciones, clase = '') {
   app.innerHTML = `<h2 class="titulo-menu">${titulo}</h2>` + (opciones.length
-    ? `<nav class="menu">${opciones.map(o => `<a class="boton-menu" href="${o.enlace}">${o.texto}</a>`).join('')}</nav>`
+    ? `<nav class="menu ${clase}">${opciones.map(o => `<a class="boton-menu" href="${o.enlace}">${o.texto}</a>`).join('')}</nav>`
     : '<p class="aviso">Todavía no hay ejercicios</p>');
 }
 
@@ -223,6 +223,17 @@ function mostrarResultado() {
     </div>`;
   document.body.append(fondo);
   fondo.querySelector('.revisar').onclick = () => { cerrarResultado(); iniciarEjercicio(ejercicio, volver, respuestas); };
+}
+
+function confirmarSalida(destino) {
+  const fondo = document.createElement('div');
+  fondo.className = 'fondo-resultado';
+  fondo.innerHTML = `<div class="resultado confirmacion" role="dialog" aria-modal="true" aria-label="Salir del ejercicio">
+      <p class="mensaje">¿Seguro que quieres salir del ejercicio?</p>
+      <div class="botones"><button class="boton-principal">Seguir</button><a class="boton-secundario" href="${destino}">Salir</a></div>
+    </div>`;
+  document.body.append(fondo);
+  fondo.querySelector('button').onclick = cerrarResultado;
 }
 
 function cerrarResultado() {
