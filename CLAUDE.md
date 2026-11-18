@@ -10,13 +10,18 @@ El código fuente es su propia documentación.
 - **Solo lectura:** Este archivo es de solo lectura para el modelo salvo que el usuario solicite explícitamente un cambio (ver Alcance del trabajo).
 - **Alcance del trabajo:** Cualquier cambio de código o refactorización que solicite el usuario debe aplicarse exclusivamente al código fuente del proyecto, ignorando este archivo de configuración salvo que el usuario lo solicite explícitamente, y solo tras pedir confirmación.
 
+## 3. Tecnología
 
-## 3. Convenciones y precauciones
+- Usa siempre HTML/JS estático, que corra íntegramente en cliente web.
+- Para las imágenes genera imágenes SVG o usa imágenes que tengas permiso para utilizar
 
-- Idioma: Mantén el idioma base y la nomenclatura siempre en castellano, mostrando únicamente textos en otras lenguas cuando las asginaturas precisamente enseñen dichas lenguas extranjeras.
+
+## 4. Convenciones y precauciones
+
+- Idioma: Mantén el idioma base y la nomenclatura siempre en castellano, mostrando únicamente textos en otras lenguas cuando las asignaturas precisamente enseñen dichas lenguas extranjeras.
 
 
-## 4. Piensa antes de programar
+## 5. Piensa antes de programar
 
 **No supongas. No ocultes la confusión. Expón las alternativas y sus compromisos.**
 
@@ -26,7 +31,7 @@ Antes de implementar:
 - Si existe un enfoque más sencillo, dilo. Discrepa cuando esté justificado.
 - Si algo no está claro, detente. Indica qué es lo que confunde. Pregunta.
 
-## 5. La simplicidad primero
+## 6. La simplicidad primero
 
 **El mínimo código que resuelva el problema. Nada especulativo.**
 
@@ -38,7 +43,7 @@ Antes de implementar:
 
 Pregúntate: "¿Diría un ingeniero sénior que esto está sobrecomplicado?" Si la respuesta es sí, simplifica.
 
-## 6. Cambios quirúrgicos
+## 7. Cambios quirúrgicos
 
 **Toca solo lo imprescindible. Limpia solo lo que tú hayas ensuciado.**
 
@@ -54,7 +59,7 @@ Cuando tus cambios dejen elementos huérfanos:
 
 La prueba: cada línea modificada debe poder vincularse directamente con la petición del usuario.
 
-## 7. Ejecución orientada a objetivos
+## 8. Ejecución orientada a objetivos
 
 **Define criterios de éxito. Itera hasta verificarlos.**
 
@@ -73,7 +78,7 @@ Para tareas de varios pasos, expón un plan breve:
 Unos criterios de éxito sólidos te permiten iterar de forma autónoma. Unos criterios débiles ("haz que funcione") requieren aclaraciones constantes.
 
 
-## 8. Interacción con GIT
+## 9. Interacción con GIT
 
 - Solo se permiten GIT diff y status; nunca realices ninguna otra operación sobre el repositorio GIT salvo que el usuario lo solicite explícitamente
 - Nunca hagas ningún commit salvo que el usuario lo solicite explícitamente
@@ -89,22 +94,29 @@ PRIMARIA DIGITAL es una aplicación web educativa destinada a la realización de
 - Cada asignatura tiene varios temas.
 - Cada tema puede tener varios ejercicios asociados.
  
-El detalle de la jerarquía de cursos, asignaturas, temas y ejericicios está especificado en el fichero CURSOS.md
+El detalle de la jerarquía de cursos, asignaturas, temas y ejercicios está especificado en el fichero modelo/CURSOS.md
 
 
 ## Directrices de diseño de UI
+
+### Fuentes
+
+Usa las siguientes fuentes cuya licencia permite su uso:
+- massallera: para contenido en general, principal fuente.
+- Escolar_P: para contenido que indique sobrescribir a mano por encima (de momento no se usa)
+- ColeCarreira: para contenido que indique sobrescribir a mano por encima con guías (de momento no se usa)
 
 ### Responsive
 Los ejercicios van a ser realizados en mayor medida en móviles y tabletas, por lo que los ejercicios deben ser siempre responsive.
 Cada ejercicio debe poderse ver bien para la mayoría de móviles en orientación landscape.
 
 ### Estilos homogéneos
-Utiliza los mismos estilos en todos los ejericicios.
+Utiliza los mismos estilos en todos los ejercicios.
 Usa tonalidades en azules para los componentes generales de la web.
 Utiliza una fuente que escriba como los niños en español la r, la b, la p, etcétera.
 
 ### Ajustar cada ejercicio al tamaño en orientación landscape
-Basa el tamaño de las fuentes y elementos web para que se ajusten al tamaño de la pantalla en orientación portrait.
+Basa el tamaño de las fuentes y elementos web para que se ajusten al tamaño de la pantalla en orientación landscape.
 
 ## Estructura de la interfaz
 
@@ -125,6 +137,7 @@ Pulsando el botón de un nivel, aparecerán las opciones del nivel siguiente.
 - Nivel 3: Selección de tema de la asignatura (de la asignatura seleccionada en el paso anterior)
 - Nivel 4: Selección de ejercicio de la asignatura (del tema seleccionado en el paso anterior)
 
+Muestra todos los valores posibles aunque no haya datos en el modelo.
 
 
 
