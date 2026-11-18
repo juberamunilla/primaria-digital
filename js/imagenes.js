@@ -23,21 +23,32 @@ function cara(animo) {
   if (animo === 'risa') s += '<path d="M43 36 Q50 46 57 36Z" fill="#a33" stroke="#333" stroke-width="1.5"/><circle cx="39" cy="37" r="2.5" fill="#f4a3a3"/><circle cx="61" cy="37" r="2.5" fill="#f4a3a3"/>';
   if (animo === 'triste') s += `<path d="M44 41 Q50 36 56 41" ${TRAZO}/><path d="M40 27 L46 25 M60 27 L54 25" ${TRAZO}/>` + '<path d="M57 34 q-2 4 0 5 q2 -1 0 -5Z" fill="#6cc3f5"/>';
   if (animo === 'enfadado') s += `<path d="M44 40 L56 40" ${TRAZO}/><path d="M39 25 L47 28.5 M61 25 L53 28.5" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>` + '<circle cx="39" cy="37" r="3" fill="#f07070"/><circle cx="61" cy="37" r="3" fill="#f07070"/>';
+  if (animo === 'grito') s += '<ellipse cx="50" cy="40" rx="5" ry="6" fill="#a33" stroke="#333" stroke-width="1.5"/>' + `<path d="M40 25 L47 24 M60 25 L53 24" ${TRAZO}/>`;
   return s;
 }
 
-function persona({ ropa, piel = '#f6c9a0', detras = '', pelo = '', delante = '', animo = 'contento' }) {
+// "brazosNormales: false" quita los brazos por defecto para dibujar otra postura en "delante"
+function persona({ ropa, piel = '#f6c9a0', detras = '', pelo = '', delante = '', animo = 'contento', brazosNormales = true }) {
   return `${detras}
     <rect x="40" y="76" width="8" height="18" rx="3" fill="#35495e"/><rect x="52" y="76" width="8" height="18" rx="3" fill="#35495e"/>
-    <path d="M37 54 L28 70 M63 54 L72 70" stroke="${ropa}" stroke-width="7" stroke-linecap="round"/>
+    ${brazosNormales ? `<path d="M37 54 L28 70 M63 54 L72 70" stroke="${ropa}" stroke-width="7" stroke-linecap="round"/>` : ''}
     <path d="M36 52 Q50 45 64 52 L67 80 L33 80 Z" fill="${ropa}"/>
-    <circle cx="28" cy="71" r="3.5" fill="${piel}"/><circle cx="72" cy="71" r="3.5" fill="${piel}"/>
+    ${brazosNormales ? `<circle cx="28" cy="71" r="3.5" fill="${piel}"/><circle cx="72" cy="71" r="3.5" fill="${piel}"/>` : ''}
     <circle cx="50" cy="32" r="15" fill="${piel}"/>
     ${pelo}${cara(animo)}${delante}`;
 }
 
 const PELO_NINO = '<path d="M35 31 Q34 15 50 16 Q66 15 65 31 Q60 22 50 22 Q42 21 35 31Z" fill="#6b3e1e"/>';
 const nino = animo => persona({ ropa: '#3a7bd5', pelo: PELO_NINO, animo });
+
+// Mano izquierda abierta con los dedos hacia arriba y el pulgar hacia dentro
+const MANO = `<g fill="#f6c9a0" stroke="#b07a4f" stroke-width="1.8">
+    <rect x="17" y="26" width="6" height="30" rx="3"/><rect x="23" y="20" width="6" height="36" rx="3"/>
+    <rect x="29" y="22" width="6" height="34" rx="3"/><rect x="35" y="29" width="6" height="27" rx="3"/>
+    <ellipse cx="44" cy="58" rx="4" ry="10" transform="rotate(-30 44 58)"/>
+    <rect x="17" y="48" width="25" height="30" rx="9"/>
+  </g>
+  <rect x="19" y="78" width="21" height="18" rx="3" fill="#3a7bd5"/>`;
 
 const CERDO = `
   <rect x="36" y="66" width="6" height="14" rx="2" fill="#f08fa8"/><rect x="46" y="68" width="6" height="14" rx="2" fill="#f08fa8"/>
@@ -200,6 +211,90 @@ const IMG = {
     <path d="M28 12 H72 V30 Q72 60 50 64 Q28 60 28 30Z" fill="#f2c94c" stroke="#c99a06" stroke-width="2"/>
     ${estrella(50, 34, 12, '#fff3b0')}
     <rect x="44" y="63" width="12" height="14" fill="#e0b000"/><rect x="30" y="76" width="40" height="12" rx="3" fill="#c99a06"/>`,
+
+  // ----- Música -----
+  claveSol: `<path d="M50 94 Q60 92 57 82 L50 14 Q50 4 58 8 Q65 15 56 27 Q37 43 36 60 Q36 77 52 77 Q67 77 67 62 Q67 50 54 50 Q44 50 44 60 Q44 67 51 68"
+      fill="none" stroke="#222" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="45" cy="91" r="6" fill="#222"/>`,
+
+  negra: '<ellipse cx="40" cy="74" rx="15" ry="10.5" fill="#222" transform="rotate(-22 40 74)"/><path d="M53.5 69 V10" stroke="#222" stroke-width="5" stroke-linecap="round"/>',
+
+  silencioNegra: '<path d="M42 8 L60 32 Q46 42 58 56 L64 62 Q46 56 50 74 Q53 84 60 90 Q38 80 42 66 Q44 60 52 60 L38 46 Q50 36 42 8Z" fill="#222" stroke="#222" stroke-width="2" stroke-linejoin="round"/>',
+
+  sostenido: '<path d="M40 14 V90 M60 10 V86" stroke="#222" stroke-width="5" stroke-linecap="round"/><path d="M26 42 L74 32 M26 68 L74 58" stroke="#222" stroke-width="9" stroke-linecap="round"/>',
+
+  // Primer plano del niño tapándose la boca con la mano (dedos hacia un lado y contorno marcado)
+  ninoCallado: `<rect x="22" y="84" width="56" height="16" rx="6" fill="#3a7bd5"/>
+    <circle cx="50" cy="46" r="34" fill="#f6c9a0"/>
+    <path d="M16 44 Q14 10 50 11 Q86 10 84 44 Q74 26 50 26 Q30 26 16 44Z" fill="#6b3e1e"/>
+    <path d="M31 34 Q37 30 43 33 M57 33 Q63 30 69 34" ${TRAZO}/>
+    <circle cx="38" cy="43" r="3.5" fill="#333"/><circle cx="62" cy="43" r="3.5" fill="#333"/>
+    <path d="M92 100 L70 74" stroke="#3a7bd5" stroke-width="14" stroke-linecap="round"/>
+    <g fill="#f6c9a0" stroke="#b07a4f" stroke-width="2">
+      <rect x="29" y="56" width="34" height="6" rx="3"/><rect x="26" y="62" width="37" height="6" rx="3"/>
+      <rect x="28" y="68" width="35" height="6" rx="3"/><rect x="32" y="74" width="31" height="6" rx="3"/>
+      <rect x="52" y="54" width="24" height="28" rx="9"/>
+      <ellipse cx="62" cy="52" rx="10" ry="4" transform="rotate(-15 62 52)"/>
+    </g>`,
+
+  ninoGritando: persona({
+    ropa: '#3a7bd5', pelo: PELO_NINO, animo: 'grito', brazosNormales: false,
+    delante: '<path d="M37 54 Q28 48 39 41 M63 54 Q72 48 61 41" fill="none" stroke="#3a7bd5" stroke-width="7" stroke-linecap="round"/>' +
+      '<circle cx="40" cy="40" r="4" fill="#f6c9a0"/><circle cx="60" cy="40" r="4" fill="#f6c9a0"/>' +
+      '<path d="M70 32 Q75 38 70 44 M77 27 Q85 38 77 49 M30 32 Q25 38 30 44 M23 27 Q15 38 23 49" fill="none" stroke="#e53935" stroke-width="2.5" stroke-linecap="round"/>'
+  }),
+
+  coche: `<path d="M6 68 L10 50 Q12 45 20 45 L32 45 L42 30 L70 30 L82 46 Q94 48 94 58 L94 68 Z" fill="#e53935"/>
+    <path d="M38 45 L46 34 L56 34 L56 45Z M60 34 L68 34 L76 45 L60 45Z" fill="#bfe7ff"/><rect x="88" y="52" width="6" height="5" rx="2" fill="#ffd23f"/>
+    <circle cx="28" cy="70" r="10" fill="#333"/><circle cx="28" cy="70" r="4" fill="#aaa"/><circle cx="74" cy="70" r="10" fill="#333"/><circle cx="74" cy="70" r="4" fill="#aaa"/>`,
+
+  tren: `<circle cx="24" cy="14" r="6" fill="#ccc"/><circle cx="34" cy="8" r="5" fill="#ddd"/>
+    <rect x="18" y="22" width="10" height="20" fill="#333"/>
+    <rect x="10" y="40" width="54" height="30" rx="4" fill="#3a7bd5"/><rect x="56" y="20" width="32" height="50" rx="4" fill="#1d4f91"/>
+    <rect x="62" y="27" width="20" height="14" rx="2" fill="#bfe7ff"/><path d="M10 64 L2 78 L12 78Z" fill="#555"/>
+    <circle cx="24" cy="77" r="9" fill="#333"/><circle cx="46" cy="77" r="9" fill="#333"/><circle cx="74" cy="77" r="9" fill="#333"/>
+    <circle cx="24" cy="77" r="3" fill="#aaa"/><circle cx="46" cy="77" r="3" fill="#aaa"/><circle cx="74" cy="77" r="3" fill="#aaa"/>`,
+
+  grifo: `<rect x="8" y="22" width="10" height="28" rx="2" fill="#7a8794"/>
+    <path d="M18 30 H60 Q76 30 76 46 V52 H62 V46 Q62 42 58 42 H18Z" fill="#aab4be"/>
+    <rect x="34" y="18" width="12" height="12" fill="#7a8794"/><rect x="26" y="12" width="28" height="7" rx="3" fill="#3a7bd5"/>
+    <path d="M64 52 Q62 72 66 94 H74 Q72 72 74 52Z" fill="#6cc3f5"/>${gota(56, 70)}${gota(82, 80)}`,
+
+  television: `<path d="M42 20 L30 6 M58 20 L70 6" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="8" y="20" width="84" height="58" rx="6" fill="#333"/><rect x="14" y="26" width="72" height="46" rx="3" fill="#bfe7ff"/>
+    <path d="M14 62 Q34 46 54 60 Q70 50 86 58 V72 H14Z" fill="#8fd16a"/><circle cx="70" cy="38" r="6" fill="#ffd23f"/>
+    <rect x="42" y="78" width="16" height="6" fill="#555"/><rect x="30" y="84" width="40" height="5" rx="2" fill="#555"/>`,
+
+  lavadora: `<rect x="16" y="8" width="68" height="86" rx="6" fill="#f4f4f4" stroke="#9aa5b1" stroke-width="3"/>
+    <path d="M16 26 H84" stroke="#9aa5b1" stroke-width="2"/><circle cx="28" cy="17" r="4" fill="#9aa5b1"/><circle cx="40" cy="17" r="4" fill="#9aa5b1"/>
+    <rect x="56" y="13" width="22" height="8" rx="2" fill="#1d4f91"/>
+    <circle cx="50" cy="60" r="24" fill="#cfd8e3" stroke="#7a8794" stroke-width="4"/><circle cx="50" cy="60" r="17" fill="#6cc3f5"/>
+    <circle cx="44" cy="56" r="4" fill="#fff" opacity=".8"/><circle cx="55" cy="64" r="3" fill="#fff" opacity=".8"/><circle cx="52" cy="52" r="2" fill="#fff" opacity=".8"/>`,
+
+  tostador: `<path d="M24 42 V24 Q24 15 35 15 Q46 15 46 24 V42Z" fill="#e8b46a" stroke="#b07a2e" stroke-width="2"/>
+    <path d="M54 42 V24 Q54 15 65 15 Q76 15 76 24 V42Z" fill="#e8b46a" stroke="#b07a2e" stroke-width="2"/>
+    <rect x="10" y="38" width="80" height="48" rx="12" fill="#c0c7cf"/><rect x="20" y="36" width="28" height="6" rx="2" fill="#555"/><rect x="52" y="36" width="28" height="6" rx="2" fill="#555"/>
+    <rect x="88" y="54" width="8" height="6" rx="1" fill="#333"/><circle cx="50" cy="66" r="6" fill="#7a8794"/>
+    <rect x="18" y="86" width="10" height="5" fill="#555"/><rect x="72" y="86" width="10" height="5" fill="#555"/>`,
+
+  altavoz: `<rect x="24" y="6" width="52" height="88" rx="6" fill="#333"/>
+    <circle cx="50" cy="28" r="10" fill="#666"/><circle cx="50" cy="28" r="4" fill="#222"/>
+    <circle cx="50" cy="64" r="20" fill="#666"/><circle cx="50" cy="64" r="8" fill="#222"/>`,
+
+  manos: `<path d="M30 14 L24 6 M50 10 V1 M70 14 L76 6" stroke="#e0a800" stroke-width="3" stroke-linecap="round"/>
+    <g transform="rotate(8 30 84)">${MANO}</g>
+    <g transform="translate(100 0) scale(-1 1) rotate(8 30 84)">${MANO}</g>`,
+
+  oreja: `<path d="M36 30 Q40 8 60 10 Q80 12 80 36 Q80 52 68 60 Q60 66 60 76 Q60 92 46 92 Q36 92 34 84 Q42 86 46 80 Q48 70 40 62 Q30 52 36 30Z"
+      fill="#f6c9a0" stroke="#d9a074" stroke-width="3"/>
+    <path d="M48 34 Q52 22 62 24 Q70 28 68 40 Q66 48 58 52 Q52 56 54 64" fill="none" stroke="#d9a074" stroke-width="3" stroke-linecap="round"/>`,
+
+  boca: `<path d="M8 50 Q24 34 40 42 Q56 34 72 50 Q56 72 40 72 Q24 72 8 50Z" fill="#e57373"/>
+    <path d="M16 50 Q40 46 64 50 Q40 66 16 50Z" fill="#7b1f1f"/><rect x="30" y="47.5" width="20" height="5" rx="1.5" fill="#fff"/>
+    <path d="M80 42 Q85 50 80 58 M87 36 Q95 50 87 64" fill="none" stroke="#3a7bd5" stroke-width="3" stroke-linecap="round"/>`,
+
+  ojos: `<path d="M12 30 Q30 20 46 30 M54 30 Q70 20 88 30" fill="none" stroke="#6b3e1e" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="29" cy="52" rx="18" ry="12" fill="#fff" stroke="#333" stroke-width="2.5"/><circle cx="29" cy="52" r="7" fill="#5d8a3a"/><circle cx="29" cy="52" r="3" fill="#222"/>
+    <ellipse cx="71" cy="52" rx="18" ry="12" fill="#fff" stroke="#333" stroke-width="2.5"/><circle cx="71" cy="52" r="7" fill="#5d8a3a"/><circle cx="71" cy="52" r="3" fill="#222"/>`,
 
   exclamacion: `<circle cx="50" cy="50" r="44" fill="#d63c3c"/><rect x="43" y="18" width="14" height="44" rx="7" fill="#fff"/><circle cx="50" cy="76" r="8" fill="#fff"/>`
 };

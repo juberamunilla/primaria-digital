@@ -69,6 +69,8 @@ Los ejercicios de cada tema se especifican en ficheros separados, estructurados 
 - Dentro de cada subcarpeta de asignatura, un fichero para cada tema llamado como el tema_id.
 - No tengas en cuenta los archivos de ejercicios que no existan o que tengan el archivo vacío, se mostrará un mensaje "Todavía no hay ejercicios".
 
+Los ejercicios que tienen varias preguntas o historias secuenciales deben permitir ir hacia atrás en dicha secuencia.
+
 Siempre que se termine el ejercicio permitirá mostrar un botón para ver el resultado del ejercicio mediante un pop up que muestre la puntuación de dicho ejercicio.
 - Para el resultado de cada ejercicio, pondera la puntuación basándote en las preguntas o historias secuenciales que contiene cada ejercicio.
 Por ejemplo, si el ejercicio tiene 4 preguntas o historias secuenciales, la puntuación máxima sería 4.

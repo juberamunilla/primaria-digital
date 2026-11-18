@@ -4,6 +4,7 @@ const app = document.getElementById('app');
 const volver = document.querySelector('.volver');
 let redibujar = null;   // vuelve a dibujar las líneas de unir al cambiar el tamaño de la pantalla
 let estado = null;      // estado del ejercicio en curso
+const REPRODUCTOR = '<div class="reproductor"><button class="escuchar">▶ Escuchar</button><span class="luces"><i></i><i></i><i></i><i></i></span></div>';
 
 window.addEventListener('resize', () => redibujar && redibujar());
 window.addEventListener('hashchange', mostrarRuta);
@@ -64,19 +65,23 @@ function pintarPaso() {
   const total = ejercicio.preguntas.length;
 
   if (indice === total) {
-    app.innerHTML = '<section class="fin"><p class="pregunta">¡Has terminado el ejercicio!</p><button class="boton-principal">Ver resultado</button></section>';
-    app.querySelector('button').onclick = mostrarResultado;
+    app.innerHTML = `<section class="fin"><p class="pregunta">¡Has terminado el ejercicio!</p>
+      <div class="botones"><button class="boton-secundario">Anterior</button><button class="boton-principal">Ver resultado</button></div></section>`;
+    app.querySelector('.boton-secundario').onclick = retroceder;
+    app.querySelector('.boton-principal').onclick = mostrarResultado;
     return;
   }
 
   const p = ejercicio.preguntas[indice];
+  const esPrimero = indice === 0 && (!p.historia || estado.verHistoria);
   app.innerHTML = `<section class="ejercicio">
       <div class="barra"><span>${ejercicio.titulo}${estado.anterior ? ' · Revisión' : ''}</span><span>${indice + 1} / ${total}</span></div>
       <div class="zona"></div>
-      <div class="acciones"><button class="boton-principal"></button></div>
+      <div class="acciones"><button class="boton-secundario"${esPrimero ? ' hidden' : ''}>Anterior</button><button class="boton-principal"></button></div>
     </section>`;
   const zona = app.querySelector('.zona');
   const boton = app.querySelector('.boton-principal');
+  app.querySelector('.boton-secundario').onclick = retroceder;
 
   if (p.historia && estado.verHistoria) {
     zona.innerHTML = `<div class="historia">${p.historia.map(v => `<div class="vineta">${ESCENA[v]}</div>`).join('')}</div>`;
@@ -87,48 +92,95 @@ function pintarPaso() {
 
   boton.textContent = indice === total - 1 ? 'Terminar' : 'Siguiente';
   boton.disabled = true;
+  estado.actual = null;
   const listo = respuesta => { estado.actual = respuesta; boton.disabled = respuesta === null; };
   const previa = estado.anterior ? estado.anterior[indice] : undefined;
-  if (ejercicio.tipo === 'unir') pintarUnir(zona, p, previa, listo);
-  else pintarElegir(zona, p, previa, listo);
+  const guardada = estado.respuestas[indice];   // respuesta dada antes de volver atrás
+  if (ejercicio.tipo === 'unir') pintarUnir(zona, p, previa, guardada, listo);
+  else if (ejercicio.tipo === 'colorear') pintarColorear(zona, p, previa, guardada, listo);
+  else pintarElegir(zona, p, previa, guardada, listo);
 
   boton.onclick = () => {
-    estado.respuestas.push(estado.actual);
+    estado.respuestas[indice] = estado.actual;
     estado.indice++;
     estado.verHistoria = true;
     pintarPaso();
   };
 }
 
-function esCorrecta(tipo, p, respuesta) {
-  return tipo === 'unir' ? p.izquierda.every(e => respuesta[e.id] === e.pareja) : respuesta === p.correcta;
+// Vuelve al paso anterior de la secuencia (de la pregunta a su historia, o a la pregunta anterior)
+function retroceder() {
+  const { ejercicio, indice } = estado;
+  const enPregunta = indice < ejercicio.preguntas.length && !(ejercicio.preguntas[indice].historia && estado.verHistoria);
+  if (enPregunta) estado.respuestas[indice] = estado.actual;
+  if (enPregunta && ejercicio.preguntas[indice].historia) estado.verHistoria = true;
+  else { estado.indice--; estado.verHistoria = false; }
+  pintarPaso();
 }
 
-// Pregunta de elegir una opción (con imágenes o con texto)
-function pintarElegir(zona, p, previa, listo) {
-  const conImagen = typeof p.opciones[0] === 'object';
+function esCorrecta(tipo, p, respuesta) {
+  if (tipo === 'unir') return p.izquierda.every(e => respuesta[e.id] === e.pareja);
+  if (tipo === 'colorear') return respuesta.every((marca, i) => marca === p.pulsos[i]);
+  if (p.correctas) return respuesta.length === p.correctas.length && p.correctas.every(i => respuesta.includes(i));
+  return respuesta === p.correcta;
+}
+
+// Pregunta de elegir: una o varias opciones, con imágenes, con texto o con ritmos
+function pintarElegir(zona, p, previa, guardada, listo) {
+  const varias = Array.isArray(p.correctas);
+  const esBuena = i => varias ? p.correctas.includes(i) : i === p.correcta;
+  const marcada = (respuesta, i) => varias ? (respuesta || []).includes(i) : respuesta === i;
+  const conImagen = Boolean(p.opciones[0].img);
+  const conRitmo = Array.isArray(p.opciones[0]);
   zona.innerHTML = `<p class="pregunta">${p.pregunta}</p>
+    ${p.pulsos ? REPRODUCTOR : ''}
     ${p.frase ? `<p class="frase">${p.frase.replace('X', '<span class="hueco"></span>')}</p>` : ''}
     <div class="opciones${conImagen ? ' con-imagen' : ''}">${p.opciones.map((o, i) => {
-      const marca = previa === i ? (i === p.correcta ? ' acierto' : ' fallo') : '';
-      const contenido = conImagen ? `<svg viewBox="0 0 100 100" role="img" aria-label="${o.texto}">${IMG[o.img]}</svg>` : o;
+      const marca = marcada(previa, i) ? (esBuena(i) ? ' acierto' : ' fallo') : '';
+      const contenido = conImagen ? `<svg viewBox="0 0 100 100" role="img" aria-label="${o.texto}">${IMG[o.img]}</svg>`
+        : conRitmo ? `<span class="ritmo">${o.map(s => `<svg viewBox="0 0 100 100" aria-hidden="true">${IMG[s ? 'negra' : 'silencioNegra']}</svg>`).join('')}</span>`
+        : o;
       return `<button class="opcion${marca}" data-i="${i}">${contenido}</button>`;
     }).join('')}</div>`;
+  if (p.pulsos) activarReproductor(zona, p);
 
   const hueco = zona.querySelector('.hueco');
   const botones = zona.querySelectorAll('.opcion');
   botones.forEach(b => b.onclick = () => {
-    botones.forEach(x => x.classList.toggle('elegida', x === b));
+    if (varias) b.classList.toggle('elegida');
+    else botones.forEach(x => x.classList.toggle('elegida', x === b));
     if (hueco) hueco.textContent = p.opciones[b.dataset.i];
-    listo(Number(b.dataset.i));
+    const elegidas = [...botones].filter(x => x.classList.contains('elegida')).map(x => Number(x.dataset.i));
+    listo(varias ? (elegidas.length ? elegidas : null) : Number(b.dataset.i));
   });
+  if (varias && guardada) guardada.forEach(i => botones[i].click());
+  else if (!varias && guardada != null) botones[guardada].click();
+}
+
+// Pregunta de escuchar y colorear: cuadrado verde es sonido y cuadrado hueco es silencio
+function pintarColorear(zona, p, previa, guardada, listo) {
+  const marcas = guardada ? [...guardada] : p.pulsos.map(() => 0);
+  zona.innerHTML = `<p class="pregunta">${p.pregunta}</p>${REPRODUCTOR}
+    <div class="cuadrados">${p.pulsos.map((pulso, i) => {
+      const marca = previa ? (previa[i] === pulso ? ' acierto' : ' fallo') : '';
+      return `<button class="cuadrado${marca}" aria-label="Pulso ${i + 1}"></button>`;
+    }).join('')}</div>`;
+  activarReproductor(zona, p);
+
+  const cuadrados = zona.querySelectorAll('.cuadrado');
+  const pintar = () => {
+    cuadrados.forEach((c, i) => c.classList.toggle('sonido', marcas[i] === 1));
+    listo([...marcas]);
+  };
+  cuadrados.forEach((c, i) => c.onclick = () => { marcas[i] = 1 - marcas[i]; pintar(); });
+  pintar();
 }
 
 // Pregunta de unir con líneas: se pulsa un elemento y después su pareja, o se arrastra de uno a otro
-function pintarUnir(zona, p, previa, listo) {
+function pintarUnir(zona, p, previa, guardada, listo) {
   const tarjeta = (e, lado) => {
     const punto = '<i class="punto"></i>';
-    const cuerpo = `<svg viewBox="0 0 100 100" aria-hidden="true">${IMG[e.img]}</svg><span>${e.texto}</span>`;
+    const cuerpo = (e.img ? `<svg viewBox="0 0 100 100" aria-hidden="true">${IMG[e.img]}</svg>` : '') + (e.texto ? `<span>${e.texto}</span>` : '');
     return `<button class="elemento" data-lado="${lado}" data-id="${e.id}">${lado === 'izq' ? cuerpo + punto : punto + cuerpo}</button>`;
   };
   zona.innerHTML = `<p class="pregunta">${p.pregunta}</p>
@@ -141,7 +193,7 @@ function pintarUnir(zona, p, previa, listo) {
   const caja = zona.querySelector('.unir');
   const lienzo = zona.querySelector('.lineas');
   const elemento = (lado, id) => caja.querySelector(`[data-lado="${lado}"][data-id="${id}"]`);
-  const conexiones = {};   // id izquierda → id derecha
+  const conexiones = { ...guardada };   // id izquierda → id derecha
   let origen = null;       // elemento pulsado pendiente de unir
   let puntero = null;      // posición del dedo mientras se arrastra
 
@@ -196,6 +248,59 @@ function pintarUnir(zona, p, previa, listo) {
 
   redibujar = dibujar;
   dibujar();
+  if (guardada) listo(guardada);
+}
+
+// ---------- Sonido sintetizado ----------
+
+const PASO_PULSO = 0.7;   // segundos entre pulsos
+let audio = null;
+
+// Las luces se encienden en cada pulso (también en los silencios) para poder seguir el ritmo
+function activarReproductor(zona, p) {
+  const boton = zona.querySelector('.escuchar');
+  const luces = zona.querySelectorAll('.luces i');
+  boton.onclick = () => {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    audio.resume();
+    const inicio = audio.currentTime + 0.15;
+    boton.disabled = true;
+    p.pulsos.forEach((pulso, i) => {
+      if (pulso) (p.sonido === 'palmada' ? palmada : claqueta)(inicio + i * PASO_PULSO);
+      setTimeout(() => luces.forEach((l, j) => l.classList.toggle('activa', j === i)), (0.15 + i * PASO_PULSO) * 1000);
+    });
+    setTimeout(() => { luces.forEach(l => l.classList.remove('activa')); boton.disabled = false; }, (0.15 + p.pulsos.length * PASO_PULSO) * 1000);
+  };
+}
+
+// Palmada: ruido corto filtrado que se apaga muy rápido
+function palmada(t) {
+  const muestras = Math.floor(audio.sampleRate * 0.2);
+  const buffer = audio.createBuffer(1, muestras, audio.sampleRate);
+  const datos = buffer.getChannelData(0);
+  for (let i = 0; i < muestras; i++) datos[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / muestras, 8);
+  const fuente = audio.createBufferSource();
+  const filtro = audio.createBiquadFilter();
+  filtro.type = 'bandpass';
+  filtro.frequency.value = 1500;
+  filtro.Q.value = 0.7;
+  fuente.buffer = buffer;
+  fuente.connect(filtro).connect(audio.destination);
+  fuente.start(t);
+}
+
+// Claqueta: golpe seco de madera
+function claqueta(t) {
+  const oscilador = audio.createOscillator();
+  const volumen = audio.createGain();
+  oscilador.type = 'triangle';
+  oscilador.frequency.setValueAtTime(1300, t);
+  oscilador.frequency.exponentialRampToValueAtTime(800, t + 0.05);
+  volumen.gain.setValueAtTime(0.9, t);
+  volumen.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+  oscilador.connect(volumen).connect(audio.destination);
+  oscilador.start(t);
+  oscilador.stop(t + 0.1);
 }
 
 // ---------- Resultado ----------

@@ -47,7 +47,11 @@ const CURSOS = [
 
 // Ejercicios por tema. Los temas sin entrada muestran "Todavía no hay ejercicios".
 // tipo 'unir': cada elemento de la izquierda indica en "pareja" el id del elemento de la derecha que le corresponde.
-// tipo 'elegir': "correcta" es la posición (empezando en 0) de la opción correcta.
+// tipo 'elegir': "correcta" es la posición (empezando en 0) de la opción correcta;
+//   si hay varias correctas se indican en "correctas". Con "pulsos" se puede escuchar un ritmo
+//   y cada opción es un ritmo (1 = negra, 0 = silencio de negra).
+// tipo 'colorear': se escuchan los "pulsos" (1 = sonido, 0 = silencio) y se colorean los cuadrados.
+// "sonido" indica el sonido sintetizado de los pulsos: 'palmada' o 'claqueta'.
 const EJERCICIOS = {
   101001: [
     {
@@ -186,6 +190,130 @@ const EJERCICIOS = {
         {
           pregunta: 'Revisa las mayúsculas y elige la frase correcta:', correcta: 2,
           opciones: ['¡te quiero! cada día más.', '¡Te quiero! cada día más.', '¡Te quiero! Cada día más.', '¡te quiero! Cada día más.']
+        }
+      ]
+    }
+  ],
+
+  105001: [
+    {
+      titulo: 'Negra o Silencio', tipo: 'elegir', preguntas: [
+        {
+          pregunta: '¿Cuál es el símbolo de la negra?', correcta: 3,
+          opciones: [
+            { img: 'claveSol', texto: 'Clave de sol' }, { img: 'silencioNegra', texto: 'Silencio de negra' },
+            { img: 'sostenido', texto: 'Sostenido' }, { img: 'negra', texto: 'Nota negra' }
+          ]
+        },
+        {
+          pregunta: '¿Cuál es el símbolo del silencio?', correcta: 1,
+          opciones: [
+            { img: 'claveSol', texto: 'Clave de sol' }, { img: 'silencioNegra', texto: 'Silencio de negra' },
+            { img: 'sostenido', texto: 'Sostenido' }, { img: 'negra', texto: 'Nota negra' }
+          ]
+        }
+      ]
+    },
+    {
+      titulo: 'Crotchet and crotchet rest', tipo: 'unir', preguntas: [
+        {
+          pregunta: 'Crotchet or crotchet rest',
+          izquierda: [
+            { id: 'negra', img: 'negra', pareja: 'crotchet' },
+            { id: 'silencio', img: 'silencioNegra', pareja: 'rest' }
+          ],
+          derecha: [
+            { id: 'crotchet', texto: 'Crotchet' },
+            { id: 'rest', texto: 'Crotchet rest' }
+          ]
+        },
+        {
+          pregunta: 'Sound or silence?',
+          izquierda: [
+            { id: 'negra', img: 'negra', pareja: 'sound' },
+            { id: 'silencio', img: 'silencioNegra', pareja: 'silence' }
+          ],
+          derecha: [
+            { id: 'sound', texto: 'Sound' },
+            { id: 'silence', texto: 'Silence' }
+          ]
+        }
+      ]
+    }
+  ],
+
+  105002: [
+    {
+      titulo: 'Seleccionar sonidos del cuerpo', tipo: 'elegir', preguntas: [
+        {
+          pregunta: 'Making sounds with my body. Choose correct.', correctas: [0, 2],
+          opciones: [
+            { img: 'manos', texto: 'Manos aplaudiendo' }, { img: 'ninoCallado', texto: 'Niño callado' },
+            { img: 'ninoGritando', texto: 'Niño gritando' }, { img: 'coche', texto: 'Coche' }
+          ]
+        },
+        {
+          pregunta: 'What parts of your body can make sounds?', correctas: [0, 2],
+          opciones: [
+            { img: 'manos', texto: 'Manos aplaudiendo' }, { img: 'oreja', texto: 'Oreja' },
+            { img: 'boca', texto: 'Voz de la boca' }, { img: 'ojos', texto: 'Ojos' }
+          ]
+        }
+      ]
+    },
+    {
+      titulo: 'Escuchar y colorear', tipo: 'colorear', preguntas: [
+        { pregunta: 'Listen and draw', sonido: 'palmada', pulsos: [1, 0, 1, 0] },
+        { pregunta: 'Listen and draw', sonido: 'palmada', pulsos: [1, 1, 0, 1] },
+        { pregunta: 'Listen and draw', sonido: 'palmada', pulsos: [1, 0, 0, 1] },
+        { pregunta: 'Listen and draw', sonido: 'palmada', pulsos: [1, 1, 1, 0] }
+      ]
+    }
+  ],
+
+  105003: [
+    {
+      titulo: 'Seleccionar sonidos en casa', tipo: 'elegir', preguntas: [
+        {
+          pregunta: 'Making sounds at home. Choose correct.', correctas: [0, 2],
+          opciones: [
+            { img: 'grifo', texto: 'Grifo con agua' }, { img: 'tren', texto: 'Tren' },
+            { img: 'television', texto: 'Televisión' }, { img: 'coche', texto: 'Coche' }
+          ]
+        },
+        {
+          pregunta: 'Choose soft sounds', correctas: [1, 2],
+          opciones: [
+            { img: 'lavadora', texto: 'Lavadora' }, { img: 'tostador', texto: 'Tostador' },
+            { img: 'grifo', texto: 'Grifo' }, { img: 'altavoz', texto: 'Altavoz musical' }
+          ]
+        },
+        {
+          pregunta: 'Choose loud sounds', correctas: [0, 3],
+          opciones: [
+            { img: 'lavadora', texto: 'Lavadora' }, { img: 'tostador', texto: 'Tostador' },
+            { img: 'grifo', texto: 'Grifo' }, { img: 'altavoz', texto: 'Altavoz musical' }
+          ]
+        }
+      ]
+    },
+    {
+      titulo: 'Escuchar y elegir', tipo: 'elegir', preguntas: [
+        {
+          pregunta: 'Listen and choose correct symbols', sonido: 'claqueta', pulsos: [1, 0, 1, 1], correcta: 1,
+          opciones: [[1, 1, 0, 1], [1, 0, 1, 1], [1, 0, 0, 1], [1, 1, 1, 0]]
+        },
+        {
+          pregunta: 'Listen and choose correct symbols', sonido: 'claqueta', pulsos: [1, 1, 0, 0], correcta: 0,
+          opciones: [[1, 1, 0, 0], [1, 0, 1, 0], [1, 0, 0, 1], [1, 1, 1, 0]]
+        },
+        {
+          pregunta: 'Listen and choose correct symbols', sonido: 'claqueta', pulsos: [1, 0, 0, 1], correcta: 3,
+          opciones: [[1, 0, 1, 1], [1, 1, 0, 1], [1, 1, 1, 1], [1, 0, 0, 1]]
+        },
+        {
+          pregunta: 'Listen and choose correct symbols', sonido: 'claqueta', pulsos: [1, 1, 1, 0], correcta: 1,
+          opciones: [[1, 0, 1, 0], [1, 1, 1, 0], [1, 1, 0, 1], [1, 0, 1, 1]]
         }
       ]
     }

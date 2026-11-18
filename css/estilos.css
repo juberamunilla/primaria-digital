@@ -144,7 +144,8 @@ button:disabled { cursor: default; }
   gap: .6rem;
 }
 
-.acciones { display: flex; justify-content: flex-end; padding-top: .4rem; }
+.acciones { display: flex; justify-content: space-between; padding-top: .4rem; }
+.acciones [hidden] { display: block; visibility: hidden; }
 
 .pregunta { margin: 0; text-align: center; font-size: 1.5rem; color: var(--azul-oscuro); }
 
@@ -226,6 +227,36 @@ button:disabled { cursor: default; }
 .lineas .nueva { stroke: var(--azul); }
 .lineas .acierto { stroke: var(--verde); stroke-dasharray: 2 12; }
 .lineas .fallo { stroke: var(--rojo); stroke-dasharray: 2 12; }
+
+/* Escuchar ritmos */
+.reproductor { display: flex; align-items: center; gap: 1rem; }
+.escuchar {
+  padding: .3rem 1.2rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background: var(--azul-oscuro);
+  border: 0;
+  border-radius: 2rem;
+}
+.escuchar:disabled { opacity: .6; }
+.luces { display: flex; gap: .5rem; }
+.luces i { width: .9rem; height: .9rem; border-radius: 50%; background: var(--azul-claro); border: 2px solid var(--azul-medio); }
+.luces i.activa { background: var(--azul); }
+
+.ritmo { display: flex; justify-content: center; gap: .4rem; }
+.ritmo svg { width: min(2.4rem, 9dvh); height: min(2.4rem, 9dvh); }
+
+.cuadrados { display: flex; gap: 1rem; }
+.cuadrado {
+  width: min(16vw, 28dvh);
+  height: min(16vw, 28dvh);
+  background: #fff;
+  border: 4px solid var(--azul-oscuro);
+  border-radius: .5rem;
+}
+.cuadrado.sonido { background: var(--verde); }
+.cuadrado.acierto { box-shadow: 0 0 0 5px var(--verde-claro), 0 0 0 8px var(--verde); }
+.cuadrado.fallo { box-shadow: 0 0 0 5px var(--rojo-claro), 0 0 0 8px var(--rojo); }
 
 /* Estados de las respuestas */
 .elegida { border-color: var(--azul-oscuro); box-shadow: 0 0 0 4px var(--azul); }
