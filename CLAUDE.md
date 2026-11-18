@@ -130,6 +130,8 @@ En el cuerpo aparecerán los botones correspondientes al nivel 1 de la jerarquí
 El encabezado con el título centrado PRIMARIA DIGITAL es un encabezado de poca altura para maximizar el contenido que se muestra.
 Un icono con forma de casa alineado a la izquierda permite volver siempre a la página principal.
   Si está en mitad de un ejercicio se pide confirmación con un pop up amigable del estilo azul de la página.
+Un icono con forma de copa alineado a la derecha lleva el número de copas (ejercicios aprobados) de la última sesión.
+  Se inicia en 0 y se va sumando 1 por cada ejercicio aprobado.
 
 ### Menú
 No se usan menús laterales ni superiores, el menú se muestra con botones con un grid centrado en el cuerpo principal de la página.

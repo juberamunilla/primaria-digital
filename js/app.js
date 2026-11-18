@@ -2,6 +2,10 @@
 
 const app = document.getElementById('app');
 const volver = document.querySelector('.volver');
+const contadorCopas = document.querySelector('.copas span');
+let copas = Number(sessionStorage.getItem('copas')) || 0;   // ejercicios aprobados mientras la pestaña siga abierta
+document.querySelector('.copas svg').innerHTML = IMG.copa;
+contadorCopas.textContent = copas;
 let redibujar = null;   // vuelve a dibujar las líneas de unir al cambiar el tamaño de la pantalla
 let estado = null;      // estado del ejercicio en curso
 const REPRODUCTOR = '<div class="reproductor"><button class="escuchar">▶ Escuchar</button><span class="luces"><i></i><i></i><i></i><i></i></span></div>';
@@ -159,7 +163,8 @@ function pintarElegir(zona, p, previa, guardada, listo) {
 
 // Pregunta de escuchar y colorear: cuadrado verde es sonido y cuadrado hueco es silencio
 function pintarColorear(zona, p, previa, guardada, listo) {
-  const marcas = guardada ? [...guardada] : p.pulsos.map(() => 0);
+  // Al revisar se parte de lo que se eligió en el intento anterior
+  const marcas = [...(guardada || previa || p.pulsos.map(() => 0))];
   zona.innerHTML = `<p class="pregunta">${p.pregunta}</p>${REPRODUCTOR}
     <div class="cuadrados">${p.pulsos.map((pulso, i) => {
       const marca = previa ? (previa[i] === pulso ? ' acierto' : ' fallo') : '';
@@ -316,6 +321,11 @@ function mostrarResultado() {
   const puntos = ejercicio.preguntas.filter((p, i) => esCorrecta(ejercicio.tipo, p, respuestas[i])).length;
   const nivel = puntos === total ? 'perfecto' : puntos >= total / 2 ? 'aprobado' : 'mejorar';
   const mensaje = { perfecto: '¡PERFECTO!', aprobado: '¡APROBADO!', mejorar: '¡Puedes hacerlo mejor!' }[nivel];
+  if (nivel !== 'mejorar') {
+    copas++;
+    sessionStorage.setItem('copas', copas);
+    contadorCopas.textContent = copas;
+  }
 
   const fondo = document.createElement('div');
   fondo.className = 'fondo-resultado';
