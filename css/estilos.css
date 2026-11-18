@@ -2,6 +2,11 @@
   font-family: 'massallera';
   src: url('../fuentes/massallera.TTF') format('truetype');
   font-display: swap;
+  /* La fuente trae métricas verticales distintas para Windows y para Android/iOS; se fijan las de Windows
+     (2200/900 sobre 2048) para que el texto quede centrado igual en todos los dispositivos */
+  ascent-override: 107%;
+  descent-override: 44%;
+  line-gap-override: 0%;
 }
 
 :root {
@@ -54,7 +59,7 @@ button:disabled { cursor: default; }
   position: absolute;
   left: .6rem;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(calc(-50% - .15rem));
   width: 2rem;
   height: 2rem;
   color: #fff;
@@ -71,7 +76,7 @@ button:disabled { cursor: default; }
   gap: .3rem;
   font-size: 1.3rem;
 }
-.copas svg { width: 2rem; height: 2rem; }
+.copas svg { width: 2rem; height: 2rem; position: relative; top: -.15rem; }
 .inicio svg, .volver svg { width: 100%; height: 100%; }
 
 #app {
