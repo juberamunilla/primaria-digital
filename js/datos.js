@@ -54,7 +54,7 @@ const EJERCICIOS = {
       titulo: 'Lectura comprensiva', tipo: 'unir', preguntas: [
         {
           historia: ['historia1a', 'historia1b'],
-          pregunta: '¿Por dónde entra cada personaje?',
+          pregunta: '¿Por dónde entra cada personaje? Une con líneas.',
           izquierda: [
             { id: 'nino', img: 'nino', texto: 'Niño', pareja: 'puerta' },
             { id: 'cerdo', img: 'cerdo', texto: 'Cerdo volador', pareja: 'ventana' }
@@ -66,7 +66,7 @@ const EJERCICIOS = {
         },
         {
           historia: ['historia2a', 'historia2b'],
-          pregunta: '¿Cómo es cada personaje?',
+          pregunta: '¿Cómo es cada personaje? Une con líneas.',
           izquierda: [
             { id: 'tortuga', img: 'tortuga', texto: 'Tortuga', pareja: 'inteligente' },
             { id: 'conejo', img: 'conejo', texto: 'Conejo', pareja: 'rapido' }
@@ -78,7 +78,7 @@ const EJERCICIOS = {
         },
         {
           historia: ['historia3a', 'historia3b'],
-          pregunta: '¿Qué le gusta a cada personaje?',
+          pregunta: '¿Qué le gusta a cada personaje? Une con líneas.',
           izquierda: [
             { id: 'bruja', img: 'bruja', texto: 'Bruja', pareja: 'hechizos' },
             { id: 'cerdo', img: 'cerdo', texto: 'Cerdo volador', pareja: 'lluvia' }
@@ -90,7 +90,7 @@ const EJERCICIOS = {
         },
         {
           historia: ['historia4a', 'historia4b'],
-          pregunta: '¿Por dónde se mueve cada personaje?',
+          pregunta: '¿Por dónde se mueve cada personaje? Une con líneas.',
           izquierda: [
             { id: 'gusano', img: 'gusano', texto: 'Gusano', pareja: 'suelo' },
             { id: 'mariposa', img: 'mariposa', texto: 'Mariposa', pareja: 'aire' }

@@ -196,7 +196,7 @@ button:disabled { cursor: default; }
 .columna { display: flex; flex-direction: column; justify-content: space-around; }
 
 .elemento {
-  height: min(calc((100dvh - var(--alto-cabecera) - 10rem) / 2), 9rem);
+  height: min(calc((100dvh - var(--alto-cabecera) - 12rem) / 2), 9rem);
   display: flex;
   align-items: center;
   justify-content: flex-start;
