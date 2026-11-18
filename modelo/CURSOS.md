@@ -77,8 +77,9 @@ En los ejercicios de unir con líneas hay que acertar todas las uniones para que
 - La mitad o más de puntuación: Una copa sin fuegos artificiales, con mensaje "¡APROBADO!" (con estilos naranjas que simbolicen advertencia)
 - Error: Una exclamación y un mensaje que diga ¡Puedes hacerlo mejor! (con estilos rojos que simbolicen error)
 
-Debe mostrar un botón que permita revisar el ejercicio, en especial los errores, permitiendo volver a realizar el ejercicio entero marcando en rojo las respuestas incorrectas señaladas anteriormente y en verde las correctas.
+Mientras se responde no se debe indicar si acierta, pero al final del ejercicio debe mostrar un botón que permita revisar el ejercicio, permitiendo volver a realizar el ejercicio entero marcando en rojo las respuestas incorrectas señaladas anteriormente y en verde las correctas.
   Se colorea lo que el niño eligió en el intento anterior, en verde si acertó y en rojo si falló.
   En las preguntas falladas tiene que encontrar él la respuesta buena.
   Si es un ejercicio de unir con líneas marcamos las líneas en rojo o en verde.
+  El repaso se puntúa otra vez
 

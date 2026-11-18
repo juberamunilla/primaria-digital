@@ -138,6 +138,7 @@ Pulsando el botón de un nivel, aparecerán las opciones del nivel siguiente.
 - Nivel 4: Selección de ejercicio de la asignatura (del tema seleccionado en el paso anterior)
 
 Muestra todos los valores posibles aunque no haya datos en el modelo.
+Permite volver al nivel anterior, si está en mitad de un ejercicio se pide confirmación.
 
 
 
