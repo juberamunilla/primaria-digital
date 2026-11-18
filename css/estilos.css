@@ -121,7 +121,16 @@ button:disabled { cursor: default; }
 
 .boton-menu:active { transform: translateY(3px); box-shadow: 0 1px 0 #143a6b; }
 
-.aviso { text-align: center; font-size: 1.4rem; color: var(--azul-oscuro); margin-top: 2rem; }
+.aviso {
+  width: fit-content;
+  margin: 2rem auto 0;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 1.4rem;
+  color: var(--azul-oscuro);
+  border: 2px solid #b5bec9;
+  border-radius: 1rem;
+}
 
 /* ---------- Botones ---------- */
 
