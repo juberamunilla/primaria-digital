@@ -50,6 +50,7 @@ const CURSOS = [
 // tipo 'elegir': "correcta" es la posición (empezando en 0) de la opción correcta;
 //   si hay varias correctas se indican en "correctas". Con "pulsos" se puede escuchar un ritmo
 //   y cada opción es un ritmo (1 = negra, 0 = silencio de negra).
+// "apiladas": las opciones de texto largas van una debajo de otra ocupando el 96% de la anchura.
 // tipo 'colorear': se escuchan los "pulsos" (1 = sonido, 0 = silencio) y se colorean los cuadrados.
 // "sonido" indica el sonido sintetizado de los pulsos: 'palmada' o 'claqueta'.
 const EJERCICIOS = {
@@ -142,7 +143,7 @@ const EJERCICIOS = {
 
   101002: [
     {
-      titulo: 'Mayúsculas', tipo: 'elegir', preguntas: [
+      titulo: 'Mayúsculas', tipo: 'elegir', apiladas: true, preguntas: [
         {
           pregunta: 'Revisa las mayúsculas y elige la frase correcta:', correcta: 2,
           opciones: ['el hijo de nacho es muy pequeño.', 'el hijo de Nacho es muy pequeño.', 'El hijo de Nacho es muy pequeño.', 'El hijo de nacho es muy pequeño.']
@@ -174,7 +175,7 @@ const EJERCICIOS = {
 
   101003: [
     {
-      titulo: 'Mayúsculas', tipo: 'elegir', preguntas: [
+      titulo: 'Mayúsculas', tipo: 'elegir', apiladas: true, preguntas: [
         {
           pregunta: 'Revisa las mayúsculas y elige la frase correcta:', correcta: 2,
           opciones: ['ayer Edu vino a clase. hoy no.', 'Ayer Edu vino a clase. hoy no.', 'Ayer Edu vino a clase. Hoy no.', 'Ayer edu vino a clase. hoy no.']

@@ -5,6 +5,11 @@ Aplicación web educativa con ejercicios para niños de primaria de 6 a 9 años,
 pensada para acompañar con material digital lo que se trabaja en el aula.
 Está diseñada sobre todo para móviles y tabletas en horizontal.
 
+Prueba de concepto
+------------------
+Es una prueba de concepto para programar html estático usando IA.
+Así aprovecho a que mi hijo repase algún ejercicio de clase, y me haga de tester.
+
 
 Cómo se usa
 -----------

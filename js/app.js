@@ -102,7 +102,7 @@ function pintarPaso() {
   const guardada = estado.respuestas[indice];   // respuesta dada antes de volver atrás
   if (ejercicio.tipo === 'unir') pintarUnir(zona, p, previa, guardada, listo);
   else if (ejercicio.tipo === 'colorear') pintarColorear(zona, p, previa, guardada, listo);
-  else pintarElegir(zona, p, previa, guardada, listo);
+  else pintarElegir(zona, p, previa, guardada, listo, ejercicio.apiladas);
 
   boton.onclick = () => {
     estado.respuestas[indice] = estado.actual;
@@ -130,7 +130,7 @@ function esCorrecta(tipo, p, respuesta) {
 }
 
 // Pregunta de elegir: una o varias opciones, con imágenes, con texto o con ritmos
-function pintarElegir(zona, p, previa, guardada, listo) {
+function pintarElegir(zona, p, previa, guardada, listo, apiladas) {
   const varias = Array.isArray(p.correctas);
   const esBuena = i => varias ? p.correctas.includes(i) : i === p.correcta;
   const marcada = (respuesta, i) => varias ? (respuesta || []).includes(i) : respuesta === i;
@@ -139,7 +139,7 @@ function pintarElegir(zona, p, previa, guardada, listo) {
   zona.innerHTML = `<p class="pregunta">${p.pregunta}</p>
     ${p.pulsos ? REPRODUCTOR : ''}
     ${p.frase ? `<p class="frase">${p.frase.replace('X', '<span class="hueco"></span>')}</p>` : ''}
-    <div class="opciones${conImagen ? ' con-imagen' : ''}">${p.opciones.map((o, i) => {
+    <div class="opciones${conImagen ? ' con-imagen' : ''}${apiladas ? ' apiladas' : ''}">${p.opciones.map((o, i) => {
       const marca = marcada(previa, i) ? (esBuena(i) ? ' acierto' : ' fallo') : '';
       const contenido = conImagen ? `<svg viewBox="0 0 100 100" role="img" aria-label="${o.texto}">${IMG[o.img]}</svg>`
         : conRitmo ? `<span class="ritmo">${o.map(s => `<svg viewBox="0 0 100 100" aria-hidden="true">${IMG[s ? 'negra' : 'silencioNegra']}</svg>`).join('')}</span>`

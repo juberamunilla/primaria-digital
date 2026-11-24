@@ -194,6 +194,8 @@ button:disabled { cursor: default; }
   max-width: 56rem;
 }
 .opciones.con-imagen { grid-template-columns: repeat(4, auto); justify-content: center; width: auto; }
+/* Frases largas: una debajo de otra ocupando el 96% de la anchura */
+.opciones.apiladas { grid-template-columns: 1fr; width: 96%; max-width: none; }
 
 .opcion {
   padding: .6rem;
