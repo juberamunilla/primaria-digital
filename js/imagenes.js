@@ -296,6 +296,23 @@ const IMG = {
     <ellipse cx="29" cy="52" rx="18" ry="12" fill="#fff" stroke="#333" stroke-width="2.5"/><circle cx="29" cy="52" r="7" fill="#5d8a3a"/><circle cx="29" cy="52" r="3" fill="#222"/>
     <ellipse cx="71" cy="52" rx="18" ry="12" fill="#fff" stroke="#333" stroke-width="2.5"/><circle cx="71" cy="52" r="7" fill="#5d8a3a"/><circle cx="71" cy="52" r="3" fill="#222"/>`,
 
+  galleta: `<circle cx="50" cy="50" r="42" fill="#d9a45b" stroke="#a8722f" stroke-width="3"/>
+    <g fill="#5d3a1a"><circle cx="34" cy="32" r="5"/><circle cx="62" cy="28" r="4"/><circle cx="70" cy="54" r="5"/>
+    <circle cx="46" cy="52" r="4"/><circle cx="28" cy="62" r="4"/><circle cx="52" cy="74" r="5"/></g>`,
+
+  zapato: `<path d="M10 72 V40 Q10 32 18 32 H34 Q36 46 52 48 L78 54 Q92 58 92 70 V72Z" fill="#3a7bd5" stroke="#1d4f91" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M40 44 L46 36 M48 47 L54 39 M56 49 L62 42" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <rect x="6" y="70" width="90" height="12" rx="5" fill="#fff" stroke="#9aa5b1" stroke-width="2.5"/>`,
+
+  estrella: estrella(50, 54, 46, '#ffd23f') + '<circle cx="40" cy="54" r="3" fill="#333"/><circle cx="60" cy="54" r="3" fill="#333"/>' +
+    `<path d="M43 63 Q50 69 57 63" ${TRAZO}/>`,
+
+  regalo: `<rect x="14" y="44" width="72" height="50" rx="3" fill="#e53935"/><rect x="10" y="32" width="80" height="16" rx="3" fill="#ef5350"/>
+    <rect x="45" y="32" width="10" height="62" fill="#ffd23f"/>
+    <ellipse cx="37" cy="22" rx="13" ry="8" fill="#ffd23f" stroke="#e0a800" stroke-width="2" transform="rotate(20 37 22)"/>
+    <ellipse cx="63" cy="22" rx="13" ry="8" fill="#ffd23f" stroke="#e0a800" stroke-width="2" transform="rotate(-20 63 22)"/>
+    <circle cx="50" cy="28" r="6" fill="#e0a800"/>`,
+
   exclamacion: `<circle cx="50" cy="50" r="44" fill="#d63c3c"/><rect x="43" y="18" width="14" height="44" rx="7" fill="#fff"/><circle cx="50" cy="76" r="8" fill="#fff"/>`
 };
 

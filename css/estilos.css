@@ -210,6 +210,71 @@ button:disabled { cursor: default; }
   height: min(19vw, calc(100dvh - var(--alto-cabecera) - 10rem));
 }
 
+/* Ordenar sílabas y separar palabras */
+.dibujo {
+  width: min(24vw, calc(100dvh - var(--alto-cabecera) - 17rem));
+  height: min(24vw, calc(100dvh - var(--alto-cabecera) - 17rem));
+}
+.casillas, .bandeja { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; min-height: 3.4rem; }
+.casilla {
+  min-width: 5rem;
+  height: 3.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 3px dashed var(--azul-medio);
+  border-radius: .8rem;
+}
+.ficha {
+  padding: .1rem .9rem;
+  font-size: 2rem;
+  color: var(--azul-oscuro);
+  background: var(--azul-claro);
+  border: 3px solid var(--azul);
+  border-radius: .6rem;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.casilla .ficha { border-color: var(--azul-medio); }
+.ficha.usada { visibility: hidden; }
+
+.letras {
+  max-width: calc(100% - 4px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: .6rem;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.letra {
+  min-width: 1.4rem;
+  padding: .1rem .15rem;
+  font-size: 1.7rem;
+  text-align: center;
+  background: #fff;
+  border: 2px solid var(--azul-medio);
+  border-radius: .4rem;
+}
+.separacion { min-width: .35rem; display: flex; border-radius: .3rem; }
+.espacio {
+  width: 1.4rem;
+  min-height: 2.6rem;
+  background: var(--azul-claro);
+  border: 3px dashed var(--azul);
+  border-radius: .4rem;
+  cursor: grab;
+  touch-action: none;
+}
+.bandeja .espacio { width: 2.4rem; }
+
+.arrastrada { opacity: .3; }
+.copia-arrastre { position: fixed; z-index: 10; margin: 0; pointer-events: none; transform: translate(-50%, -50%); }
+
 /* Unir con líneas */
 .unir {
   position: relative;
@@ -290,6 +355,10 @@ button:disabled { cursor: default; }
 .elegida { border-color: var(--azul-oscuro); box-shadow: 0 0 0 4px var(--azul); }
 .opcion.acierto { background: var(--verde-claro); border-color: var(--verde); }
 .opcion.fallo { background: var(--rojo-claro); border-color: var(--rojo); }
+.casilla.acierto, .separacion.acierto .espacio { background: var(--verde-claro); border-color: var(--verde); }
+.casilla.fallo, .separacion.fallo .espacio { background: var(--rojo-claro); border-color: var(--rojo); }
+.separacion.acierto { background: var(--verde); }
+.separacion.fallo { background: var(--rojo); }
 
 /* Historias */
 .historia { flex: 1; min-height: 0; width: 100%; display: flex; gap: 1rem; }

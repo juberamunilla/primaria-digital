@@ -53,6 +53,9 @@ const CURSOS = [
 // "apiladas": las opciones de texto largas van una debajo de otra ocupando el 96% de la anchura.
 // tipo 'colorear': se escuchan los "pulsos" (1 = sonido, 0 = silencio) y se colorean los cuadrados.
 // "sonido" indica el sonido sintetizado de los pulsos: 'palmada' o 'claqueta'.
+// tipo 'ordenar': se arrastran las "silabas" (en el orden en que se muestran) a las casillas
+//   hasta formar la "solucion". Con "img" se muestra el dibujo de la palabra.
+// tipo 'separar': se arrastran espacios entre las letras de "frase"; en "solucion" cada "-" es un espacio.
 const EJERCICIOS = {
   101001: [
     {
@@ -177,6 +180,10 @@ const EJERCICIOS = {
     {
       titulo: 'Mayúsculas', tipo: 'elegir', apiladas: true, preguntas: [
         {
+          pregunta: 'Revisa las mayúsculas y elige la frase correcta:', correcta: 3,
+          opciones: ['llama a Daiana. ¡rápido!', 'llama a Daiana. ¡Rápido!', 'Llama a Daiana. ¡rápido!', 'Llama a Daiana. ¡Rápido!']
+        },
+        {
           pregunta: 'Revisa las mayúsculas y elige la frase correcta:', correcta: 2,
           opciones: ['ayer Edu vino a clase. hoy no.', 'Ayer Edu vino a clase. hoy no.', 'Ayer Edu vino a clase. Hoy no.', 'Ayer edu vino a clase. hoy no.']
         },
@@ -192,6 +199,55 @@ const EJERCICIOS = {
           pregunta: 'Revisa las mayúsculas y elige la frase correcta:', correcta: 2,
           opciones: ['¡te quiero! cada día más.', '¡Te quiero! cada día más.', '¡Te quiero! Cada día más.', '¡te quiero! Cada día más.']
         }
+      ]
+    },
+    {
+      titulo: 'Contar letras', tipo: 'elegir', preguntas: [
+        { pregunta: 'Cuenta el número de letras y elige la respuesta correcta:', frase: 'burro', opciones: ['2', '3', '5', '7'], correcta: 2 },
+        { pregunta: 'Cuenta el número de letras y elige la respuesta correcta:', frase: 'armario', opciones: ['3', '5', '7', '9'], correcta: 2 },
+        { pregunta: 'Cuenta el número de letras y elige la respuesta correcta:', frase: 'escaleras', opciones: ['6', '7', '8', '9'], correcta: 3 },
+        { pregunta: 'Cuenta el número de letras y elige la respuesta correcta:', frase: 'flor', opciones: ['2', '3', '4', '5'], correcta: 2 },
+        { pregunta: 'Cuenta el número de letras y elige la respuesta correcta:', frase: 'astronauta', opciones: ['8', '9', '10', '11'], correcta: 2 }
+      ]
+    },
+    {
+      titulo: 'Ordenar sílabas', tipo: 'ordenar', preguntas: [
+        { pregunta: 'Ordena las sílabas:', img: 'galleta', silabas: ['ta', 'ga', 'lle'], solucion: ['ga', 'lle', 'ta'] },
+        { pregunta: 'Ordena las sílabas:', img: 'zapato', silabas: ['pa', 'to', 'za'], solucion: ['za', 'pa', 'to'] },
+        { pregunta: 'Ordena las sílabas:', img: 'estrella', silabas: ['es', 'lla', 'tre'], solucion: ['es', 'tre', 'lla'] },
+        { pregunta: 'Ordena las sílabas:', img: 'regalo', silabas: ['lo', 're', 'ga'], solucion: ['re', 'ga', 'lo'] }
+      ]
+    },
+    {
+      titulo: 'Contar las sílabas', tipo: 'elegir', preguntas: [
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'adorno', opciones: ['1', '2', '3', '4'], correcta: 2 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'estanque', opciones: ['1', '2', '3', '4'], correcta: 2 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'gato', opciones: ['1', '2', '3', '4'], correcta: 1 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'sol', opciones: ['1', '2', '3', '4'], correcta: 0 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'profesor', opciones: ['1', '2', '3', '4'], correcta: 2 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'árbol', opciones: ['1', '2', '3', '4'], correcta: 1 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'abuela', opciones: ['1', '2', '3', '4'], correcta: 2 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'dulce', opciones: ['1', '2', '3', '4'], correcta: 1 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'estuche', opciones: ['1', '2', '3', '4'], correcta: 2 },
+        { pregunta: 'Cuenta el número de sílabas y elige la respuesta correcta:', frase: 'papelera', opciones: ['1', '2', '3', '4'], correcta: 3 }
+      ]
+    },
+    {
+      titulo: 'Forma la palabra', tipo: 'ordenar', preguntas: [
+        { pregunta: 'Ordena las sílabas y encuentra la palabra secreta:', silabas: ['rro', 'pe'], solucion: ['pe', 'rro'] },
+        { pregunta: 'Ordena las sílabas y encuentra la palabra secreta:', silabas: ['la', 'mo', 'chi'], solucion: ['mo', 'chi', 'la'] },
+        { pregunta: 'Ordena las sílabas y encuentra la palabra secreta:', silabas: ['sa', 'yu', 'no', 'de'], solucion: ['de', 'sa', 'yu', 'no'] },
+        { pregunta: 'Ordena las sílabas y encuentra la palabra secreta:', silabas: ['der', 'cua', 'no'], solucion: ['cua', 'der', 'no'] },
+        { pregunta: 'Ordena las sílabas y encuentra la palabra secreta:', silabas: ['ser', 'cio', 'vi'], solucion: ['ser', 'vi', 'cio'] }
+      ]
+    },
+    {
+      titulo: 'Separa las palabras', tipo: 'separar', preguntas: [
+        { pregunta: 'Separa las palabras poniendo espacios:', frase: 'Megustajugar', solucion: 'Me-gusta-jugar' },
+        { pregunta: 'Separa las palabras poniendo espacios:', frase: 'Yoleobien', solucion: 'Yo-leo-bien' },
+        { pregunta: 'Separa las palabras poniendo espacios:', frase: 'Comomuchafruta', solucion: 'Como-mucha-fruta' },
+        { pregunta: 'Separa las palabras poniendo espacios:', frase: 'Anaduermepoco', solucion: 'Ana-duerme-poco' },
+        { pregunta: 'Separa las palabras poniendo espacios:', frase: 'Bajolasescaleras', solucion: 'Bajo-las-escaleras' }
       ]
     }
   ],

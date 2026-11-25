@@ -102,6 +102,8 @@ function pintarPaso() {
   const guardada = estado.respuestas[indice];   // respuesta dada antes de volver atrás
   if (ejercicio.tipo === 'unir') pintarUnir(zona, p, previa, guardada, listo);
   else if (ejercicio.tipo === 'colorear') pintarColorear(zona, p, previa, guardada, listo);
+  else if (ejercicio.tipo === 'ordenar') pintarOrdenar(zona, p, previa, guardada, listo);
+  else if (ejercicio.tipo === 'separar') pintarSeparar(zona, p, previa, guardada, listo);
   else pintarElegir(zona, p, previa, guardada, listo, ejercicio.apiladas);
 
   boton.onclick = () => {
@@ -125,6 +127,8 @@ function retroceder() {
 function esCorrecta(tipo, p, respuesta) {
   if (tipo === 'unir') return p.izquierda.every(e => respuesta[e.id] === e.pareja);
   if (tipo === 'colorear') return respuesta.every((marca, i) => marca === p.pulsos[i]);
+  if (tipo === 'ordenar') return respuesta.every((s, h) => p.silabas[s] === p.solucion[h]);
+  if (tipo === 'separar') return respuesta.join() === espaciosCorrectos(p).join();
   if (p.correctas) return respuesta.length === p.correctas.length && p.correctas.every(i => respuesta.includes(i));
   return respuesta === p.correcta;
 }
@@ -254,6 +258,145 @@ function pintarUnir(zona, p, previa, guardada, listo) {
   redibujar = dibujar;
   dibujar();
   if (guardada) listo(guardada);
+}
+
+// Arrastre con el dedo o el ratón: si apenas se mueve cuenta como toque.
+// Mientras se arrastra, una copia del elemento sigue al dedo.
+function arrastrar(ev, el, alTocar, alSoltar) {
+  const x0 = ev.clientX, y0 = ev.clientY;
+  let copia = null;
+  const mover = e => {
+    if (!copia) {
+      if (Math.hypot(e.clientX - x0, e.clientY - y0) < 8) return;
+      copia = el.cloneNode(true);
+      copia.classList.add('copia-arrastre');
+      document.body.append(copia);
+      el.classList.add('arrastrada');
+    }
+    copia.style.left = e.clientX + 'px';
+    copia.style.top = e.clientY + 'px';
+  };
+  const soltar = e => {
+    removeEventListener('pointermove', mover);
+    removeEventListener('pointerup', soltar);
+    removeEventListener('pointercancel', soltar);
+    if (!copia) return e.type === 'pointerup' && alTocar();
+    copia.remove();
+    el.classList.remove('arrastrada');
+    alSoltar(document.elementFromPoint(e.clientX, e.clientY), e.clientX, e.clientY);
+  };
+  addEventListener('pointermove', mover);
+  addEventListener('pointerup', soltar);
+  addEventListener('pointercancel', soltar);
+}
+
+// Pregunta de ordenar: las sílabas se arrastran (o se tocan) para ponerlas en las casillas
+function pintarOrdenar(zona, p, previa, guardada, listo) {
+  // huecos[h] es la sílaba colocada en la casilla h (o null); al revisar se parte del intento anterior
+  const huecos = [...(guardada || previa || p.solucion.map(() => null))];
+  zona.innerHTML = `<p class="pregunta">${p.pregunta}</p>
+    ${p.img ? `<svg class="dibujo" viewBox="0 0 100 100" aria-hidden="true">${IMG[p.img]}</svg>` : ''}
+    <div class="casillas"></div><div class="bandeja"></div>`;
+  const casillas = zona.querySelector('.casillas');
+  const bandeja = zona.querySelector('.bandeja');
+  const ficha = (s, clase = '') => `<span class="ficha${clase}" data-s="${s}">${p.silabas[s]}</span>`;
+
+  function pintar() {
+    casillas.innerHTML = huecos.map((s, h) => {
+      const marca = previa ? (p.silabas[previa[h]] === p.solucion[h] ? ' acierto' : ' fallo') : '';
+      return `<div class="casilla${marca}" data-h="${h}">${s === null ? '' : ficha(s)}</div>`;
+    }).join('');
+    // Las sílabas colocadas dejan su sitio vacío en la bandeja para que no se muevan las demás
+    bandeja.innerHTML = p.silabas.map((_, s) => ficha(s, huecos.includes(s) ? ' usada' : '')).join('');
+    listo(huecos.includes(null) ? null : [...huecos]);
+  }
+  // Si la casilla está ocupada, su sílaba pasa al sitio de la que llega (o vuelve a la bandeja)
+  const colocar = (s, h) => { const antes = huecos.indexOf(s); if (antes >= 0) huecos[antes] = huecos[h]; huecos[h] = s; };
+  const quitar = s => { const h = huecos.indexOf(s); if (h >= 0) huecos[h] = null; };
+
+  zona.onpointerdown = ev => {
+    const el = ev.target.closest('.ficha:not(.usada)');
+    if (!el) return;
+    ev.preventDefault();
+    const s = Number(el.dataset.s);
+    const enCasilla = Boolean(el.closest('.casilla'));
+    arrastrar(ev, el, () => {
+      if (enCasilla) quitar(s);
+      else if (huecos.includes(null)) colocar(s, huecos.indexOf(null));
+      pintar();
+    }, destino => {
+      const casilla = destino && destino.closest('.casilla');
+      if (casilla) colocar(s, Number(casilla.dataset.h));
+      else if (enCasilla && destino && destino.closest('.bandeja')) quitar(s);
+      pintar();
+    });
+  };
+  pintar();
+}
+
+// Posiciones de los espacios de la solución: el espacio g va detrás de la letra g de la frase
+function espaciosCorrectos(p) {
+  const espacios = [];
+  let letra = -1;
+  for (const c of p.solucion) c === '-' ? espacios.push(letra) : letra++;
+  return espacios;
+}
+
+// Pregunta de separar palabras: se arrastran los espacios entre las letras.
+// También se puede tocar entre dos letras para poner o quitar un espacio.
+function pintarSeparar(zona, p, previa, guardada, listo) {
+  const letras = [...p.frase];
+  const correctos = espaciosCorrectos(p);
+  // Al revisar se dejan los espacios bien puestos en el intento anterior y los mal puestos vuelven a la bandeja
+  const espacios = [...(guardada || (previa || []).filter(g => correctos.includes(g)))];
+  zona.innerHTML = `<p class="pregunta">${p.pregunta}</p><div class="letras"></div><div class="bandeja"></div>`;
+  const fila = zona.querySelector('.letras');
+  const bandeja = zona.querySelector('.bandeja');
+
+  function pintar() {
+    espacios.sort((a, b) => a - b);
+    fila.innerHTML = letras.map((l, g) => {
+      if (g === letras.length - 1) return `<span class="letra">${l}</span>`;
+      const marca = previa && previa.includes(g) ? (correctos.includes(g) ? ' acierto' : ' fallo') : '';
+      return `<span class="letra">${l}</span><span class="separacion${marca}" data-g="${g}">${espacios.includes(g) ? `<span class="espacio" data-g="${g}"></span>` : ''}</span>`;
+    }).join('');
+    bandeja.innerHTML = '<span class="espacio"></span>'.repeat(correctos.length - espacios.length);
+    listo(espacios.length === correctos.length ? [...espacios] : null);
+  }
+  // Separación más cercana al dedo, si está a menos de la altura de una letra
+  function cercana(x, y) {
+    let mejor = null, distancia = Infinity;
+    fila.querySelectorAll('.separacion').forEach(el => {
+      const r = el.getBoundingClientRect();
+      const d = Math.hypot(x - (r.left + r.width / 2), y - (r.top + r.height / 2));
+      if (d < distancia) { distancia = d; mejor = Number(el.dataset.g); }
+    });
+    return distancia < fila.querySelector('.letra').offsetHeight ? mejor : null;
+  }
+  const poner = g => { if (g !== null && !espacios.includes(g) && espacios.length < correctos.length) espacios.push(g); };
+  const quitar = g => espacios.splice(espacios.indexOf(g), 1);
+
+  zona.onpointerdown = ev => {
+    const espacio = ev.target.closest('.espacio');
+    if (espacio) {
+      ev.preventDefault();
+      const g = espacio.dataset.g === undefined ? null : Number(espacio.dataset.g);   // null si viene de la bandeja
+      return arrastrar(ev, espacio, () => { if (g !== null) { quitar(g); pintar(); } }, (destino, x, y) => {
+        const nueva = cercana(x, y);
+        const libre = nueva !== null && !espacios.includes(nueva);
+        if (g !== null && (libre || (destino && destino.closest('.bandeja')))) quitar(g);
+        if (libre) poner(nueva);
+        pintar();
+      });
+    }
+    if (!ev.target.closest('.letras')) return;
+    ev.preventDefault();
+    const g = cercana(ev.clientX, ev.clientY);
+    if (g === null) return;
+    espacios.includes(g) ? quitar(g) : poner(g);
+    pintar();
+  };
+  pintar();
 }
 
 // ---------- Sonido sintetizado ----------
